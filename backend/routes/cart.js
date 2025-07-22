@@ -193,7 +193,7 @@ routes.get("/productview",async(req, res)=>{
                       return res.json({
                           body: {
                               cart,
-                              imgurl: imgurl.path
+                              imgurl: imgurl.path,
                           },
                           relatedProduct,
                           relatedProductimg
