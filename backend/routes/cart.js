@@ -206,61 +206,102 @@ routes.get("/productview",async(req, res)=>{
         })
 });
 
-routes.post("/addedcart",async(req, res)=>{
-        const {authorization} = req.headers;
+routes.post("/addedcart", async (req, res) => {
+    try {
+        const { authorization } = req.headers;
         const body = req.body;
-        if(authorization){
-              const auth = authorization.split(' ');
-              if(auth[0] == "Bearer"){
-                  const token = auth[1];
-                  const decoded = jwt.decode(token, jwtSecret);
 
-                  const user = await AddedCart.findOne({
-                             userId: decoded.userId
-                  })
-
-                  if(user){
-                        const productExist = await AddedCart.find({
-                                   "userCart.product_name": body.product_name
-                        });
-                        if(productExist.length === 0){
-                           const addedcart = await AddedCart.updateOne({
-                                userId: decoded.userId
-                           },{
-                               $push:{
-                                   userCart:{
-                                         product_name: body.product_name,
-                                         img: body.img,
-                                         price: body.price,
-                                         qty: body.qty
-                                   }
-                               }
-                           })
-                        }else{
-                            const cart = await AddedCart.updateOne({
-                                  userId: decoded.userId,
-                                   "userCart.product_name": body.product_name
-                            },{
-                              $inc:{"userCart.$.qty": 1}
-                            })
-                           if(cart){
-                               return res.json({
-                                message:"success"
-                               })
-                           }
-                        }
-                  }else{
-                           await AddedCart.create({
-                                 userId: decoded.userId,
-                                 userCart:body
-                           });
-                  }
-                  
-                  return res.json({
-                       message: "success"
-                  })
-              }
+        if (!authorization) {
+            return res.status(401).json({ message: "Authorization header missing" });
         }
+
+        const auth = authorization.split(' ');
+        if (auth[0] !== "Bearer") {
+            return res.status(401).json({ message: "Invalid authorization format" });
+        }
+
+        const token = auth[1];
+        const decoded = jwt.decode(token, jwtSecret);
+
+        if (!decoded || !decoded.userId) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+
+        const user = await AddedCart.findOne({ userId: decoded.userId });
+
+        if (user) {
+            // Check if the product already exists for this user
+            const productExist = await AddedCart.findOne({
+                userId: decoded.userId,
+                "userCart.product_name": body.product_name
+            });
+
+            if (!productExist) {
+                // Product does not exist, push new product to cart
+                const addedcart = await AddedCart.updateOne(
+                    { userId: decoded.userId },
+                    {
+                        $push: {
+                            userCart: {
+                                product_name: body.product_name,
+                                img: body.img,
+                                price: body.price,
+                                qty: body.qty
+                            }
+                        }
+                    }
+                );
+
+                if (addedcart.modifiedCount === 1) {
+                    return res.json({ message: "Product added to cart" });
+                } else {
+                    return res.status(500).json({ message: "Failed to add product to cart" });
+                }
+
+            } else {
+                // Product exists, increment quantity
+                const updatedCart = await AddedCart.updateOne(
+                    {
+                        userId: decoded.userId,
+                        "userCart.product_name": body.product_name
+                    },
+                    {
+                        $inc: { "userCart.$.qty": 1 }
+                    }
+                );
+
+                if (updatedCart.modifiedCount === 1) {
+                    return res.json({ message: "Product quantity incremented" });
+                } else {
+                    return res.status(500).json({ message: "Failed to increment product quantity" });
+                }
+            }
+
+        } else {
+            // User does not have a cart, create cart with the first product
+            const created = await AddedCart.create({
+                userId: decoded.userId,
+                userCart: [
+                    {
+                        product_name: body.product_name,
+                        img: body.img,
+                        price: body.price,
+                        qty: body.qty
+                    }
+                ]
+            });
+
+            if (created) {
+                return res.json({ message: "Cart created and product added" });
+            } else {
+                return res.status(500).json({ message: "Failed to create cart" });
+            }
+        }
+
+    } catch (err) {
+        console.error("Error in /addedcart:", err);
+        res.status(500).json({ message: "Internal Server Error", error: err.message });
+    }
 });
 
 routes.get('/addcartproducts',async(req, res)=>{
