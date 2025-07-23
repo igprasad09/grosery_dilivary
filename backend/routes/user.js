@@ -50,6 +50,10 @@ routes.post("/signin",async(req, res)=>{
         return res.status(400).json({
              message:"invalid input"
         })
+});
+
+routes.get('/test', (req, res)=>{
+         res.send("hello world");
 })
 
 module.exports = routes;
