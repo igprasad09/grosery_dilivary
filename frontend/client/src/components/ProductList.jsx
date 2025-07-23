@@ -7,15 +7,15 @@ export const ProductList = () =>{
      const [product_list, setProductList] = useState(null);
 
      function handleToggleButton(element){
-           axios.post("http://localhost:3000/api/v1/changelive",element).then((res)=>{
+           axios.post("https://grosery-dilivary.vercel.app/api/v1/changelive",element).then((res)=>{
                
            }).catch(err=>alert(err));
-            axios.get("http://localhost:3000/api/v1/allproductlist").then((res)=>{
+            axios.get("https://grosery-dilivary.vercel.app/api/v1/allproductlist").then((res)=>{
                  setProductList(res.data);
           }).catch(err=>alert(err));
      }
      useEffect(()=>{
-          axios.get("http://localhost:3000/api/v1/allproductlist").then((res)=>{
+          axios.get("https://grosery-dilivary.vercel.app/api/v1/allproductlist").then((res)=>{
                  setProductList(res.data);
           }).catch(err=>alert(err));
      },[product_list]);

@@ -6,6 +6,7 @@ import { SellerLogin } from "../components/SellerLogin";
 import { Cart } from "../components/Cart";
 import { useRecoilState } from "recoil";
 import { cartCount } from "../Recoil/Context";
+import { ProductViewSkeleton } from "../components/ProductViewSkeleton";
 
 function ProductView() {
     const location = useLocation();
@@ -14,6 +15,7 @@ function ProductView() {
     const [productImf, setProductImf] = useState([]);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [relatedProductimg, setRelatedproductimg] = useState([]);
+    const [loading, setloading] = useState(true)
     const [cartvalue, setValue] = useRecoilState(cartCount);
 
 
@@ -24,7 +26,7 @@ function ProductView() {
     const id = queryparams.get('id');
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/v1/productview",
+        axios.get("https://grosery-dilivary.vercel.app/api/v1/productview",
             {
                 headers: {
                     Authorization: localStorage.getItem('token')
@@ -36,6 +38,7 @@ function ProductView() {
                 setProductImf(res.data.body);
                 setRelatedProducts(res.data.relatedProduct);
                 setRelatedproductimg(res.data.relatedProductimg);
+                setloading(false)
             })
     }, [id]);
 
@@ -56,7 +59,7 @@ function ProductView() {
     }, [product.images])
 
     function handleAddcart() {
-        axios.post("http://localhost:3000/api/v1/addedcart", {
+        axios.post("https://grosery-dilivary.vercel.app/api/v1/addedcart", {
             product_name: product.name,
             img: product.images[0],
             price: product.price,
@@ -78,7 +81,10 @@ function ProductView() {
 
             {sellerLogin ? <SellerLogin /> : null}
 
-            <div className="flex justify-center mt-10">
+            {loading?(
+                <ProductViewSkeleton/>
+            ):(
+                <div className="flex justify-center mt-10">
                 <div className="max-w-6xl w-full px-6">
                     <p>
                         <Link to="/home"><span>Home</span></Link> /
@@ -143,6 +149,7 @@ function ProductView() {
                     </div>
                 </div>
             </div>
+            )}
 
             <p className="text-3xl text-center font-semibold text-neutral-700 mt-20">Related Products</p>
             <div className=" md:flex justify-center grid grid-cols-2">

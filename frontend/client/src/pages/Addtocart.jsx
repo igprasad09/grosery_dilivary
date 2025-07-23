@@ -23,7 +23,7 @@ function Addtocart() {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/v1/addcartproducts", {
+        axios.get("https://grosery-dilivary.vercel.app/api/v1/addcartproducts", {
             headers: {
                 Authorization: localStorage.getItem('token')
             }
@@ -47,7 +47,7 @@ function Addtocart() {
     },[addedCart]);
 
     function removeItemFromCart(product){
-          axios.post("http://localhost:3000/api/v1/deletecart",{
+          axios.post("https://grosery-dilivary.vercel.app/api/v1/deletecart",{
                product_name : product.product_name
           },{
              headers: {
@@ -133,7 +133,7 @@ function Addtocart() {
                                     <p onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
                                         New York, USA
                                     </p>
-                                    <p onClick={() => setShowAddress(false)} className="text-indigo-500 text-center cursor-pointer p-2 hover:bg-indigo-500/10">
+                                    <p  className="text-indigo-500 text-center cursor-pointer p-2 hover:bg-indigo-500/10">
                                         Add address
                                     </p>
                                 </div>

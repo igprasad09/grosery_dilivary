@@ -41,7 +41,7 @@ export const Navbar = ({ seller , onclick, onchange}) => {
 
                     <div className="relative">
                         <div className=" absolute  left-6 -top-1">
-                            <p className="flex h-0 w-0 items-center justify-center rounded-full bg-emerald-400 p-2 text-[10px] text-white">{cartvalueCount}</p>
+                            
                         </div>
                        <Link to="/cart">
                           <img src="/cart_icon.svg" alt="" className="w-6" />

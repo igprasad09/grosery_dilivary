@@ -60,7 +60,7 @@ export const Addproduct = () => {
                     formData.append(`files`, file); // use `files` or `files[]` depending on your backend parsing
                 });
 
-                axios.post("http://localhost:3000/api/v1/addproduct", formData, {
+                axios.post("https://grosery-dilivary.vercel.app/api/v1/addproduct", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     }

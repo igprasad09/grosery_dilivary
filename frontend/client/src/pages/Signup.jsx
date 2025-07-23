@@ -10,7 +10,7 @@ function Signup() {
     
 
     function handleSignup(){
-         axios.post('http://localhost:3000/user/signup',{
+         axios.post('https://grosery-dilivary.vercel.app/user/signup',{
                email: inputEmail,
                password: inputPassword
          }).then((res)=>{

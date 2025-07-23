@@ -9,6 +9,7 @@ import { WhyChooseUsSection } from "../components/WhyChooseUsSection";
 import { Subscribe } from "../components/Subscribe";
 import { Footer } from "../components/Footer";
 import { SellerLogin } from "../components/SellerLogin";
+import { CartSkeleton } from "../components/CartSkeleton";
 
 function Home() {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Home() {
         if (!localStorage.getItem('token')) {
             navigate('/signin');
         }
-        axios.get('https://grosery-dilivary-1.onrender.com/api/v1/bestseller', {
+        axios.get('https://grosery-dilivary.vercel.app/api/v1/bestseller', {
             headers: {
                 authorization: localStorage.getItem('token')
             }
@@ -51,41 +52,9 @@ function Home() {
                         </Link>
                     ))
                 ) : (
-
-                    <div role="status" className="space-y-2.5 animate-pulse max-w-lg">
-                        <div className="flex items-center w-full">
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                        </div>
-                        <div className="flex items-center w-full max-w-[480px]">
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
-                        </div>
-                        <div className="flex items-center w-full max-w-[400px]">
-                            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-80"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                        </div>
-                        <div className="flex items-center w-full max-w-[480px]">
-                            <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
-                        </div>
-                        <div className="flex items-center w-full max-w-[440px]">
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-32"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
-                            <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
-                        </div>
-                        <div className="flex items-center w-full max-w-[360px]">
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                            <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-80"></div>
-                            <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                        </div>
-                        <span className="sr-only">Loading...</span>
-                    </div>
-
+                    Array(5).fill("").map((_,index)=>(
+                       <CartSkeleton key={index}/>         
+                    ))
                 )}
 
             </div>
