@@ -8,7 +8,9 @@
 ---
 
 ## 🌐 Live Demo  
-👉 **[Click Here to Visit FreshCart](https://your-live-link.vercel.app](https://grosery-shop.netlify.app/))**  
+👉 **[Click Here to Visit FreshCart](https://grosery-shop.netlify.app/)**
+
+ 
 
 ---
 
